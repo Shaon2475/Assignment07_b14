@@ -1,0 +1,56 @@
+"use client";
+import Image from "next/image";
+import { useMemo } from "react";
+import { getProducts } from "@/lib/api";
+import { useAsync } from "@/lib/hooks";
+import ProductGrid, { SkeletonGrid } from "@/components/ProductGrid";
+import EmptyState from "@/components/EmptyState";
+
+function Section({ title, sub, id, children }: { title: string; sub?: string; id?: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className="mb-10 scroll-mt-28">
+      <h2 className="text-2xl font-extrabold">{title}</h2>
+      {sub && <p className="text-neutral/60 mb-4">{sub}</p>}
+      <div className={sub ? "" : "mt-4"}>{children}</div>
+    </section>
+  );
+}
+
+export default function Home() {
+  const { data, loading, error } = useAsync(() => getProducts(), []);
+  const risers = useMemo(() => (data ?? []).filter((p) => p.change > 0).sort((a, b) => b.change - a.change).slice(0, 6), [data]);
+  const fallers = useMemo(() => (data ?? []).filter((p) => p.change < 0).sort((a, b) => a.change - b.change).slice(0, 6), [data]);
+
+  return (
+    <div className="max-w-6xl mx-auto px-4">
+      {/* Hero */}
+      <section className="grid md:grid-cols-2 gap-8 items-center py-10 md:py-14">
+        <div>
+          <p className="text-primary font-semibold mb-2">🌿 আজকের বাজারদর</p>
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-3">প্রয়োজনীয় পণ্যের দাম এক নজরে</h1>
+          <p className="text-neutral/70 mb-6">চাল, ডাল, তেল, সবজি, মাছ ও মাংসের আজকের দাম এবং দাম বাড়া-কমার খবর — সব এক জায়গায়।</p>
+          <a href="#সব-পণ্য" className="btn btn-primary">সব পণ্য দেখুন ↓</a>
+        </div>
+        <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-base-300">
+          <Image src="/bazar-hero.png" alt="বাজার" fill priority sizes="(min-width:768px) 50vw, 100vw" className="object-cover" />
+        </div>
+      </section>
+
+      {error ? (
+        <EmptyState title="ডাটা লোড করা যায়নি" message="একটু পরে আবার চেষ্টা করুন।" />
+      ) : (
+        <>
+          <Section title="আজ দাম বেড়েছে ▲" sub="যেসব পণ্যের দাম সবচেয়ে বেশি বেড়েছে">
+            {loading ? <SkeletonGrid n={6} /> : <ProductGrid items={risers} />}
+          </Section>
+          <Section title="আজ দাম কমেছে ▼" sub="যেসব পণ্যের দাম সবচেয়ে বেশি কমেছে">
+            {loading ? <SkeletonGrid n={6} /> : <ProductGrid items={fallers} />}
+          </Section>
+          <Section id="সব-পণ্য" title="সব পণ্য" sub="নিত্যপ্রয়োজনীয় সব পণ্যের আজকের দাম">
+            {loading ? <SkeletonGrid /> : <ProductGrid items={data ?? []} />}
+          </Section>
+        </>
+      )}
+    </div>
+  );
+}
