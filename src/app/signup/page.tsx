@@ -17,6 +17,7 @@ export default function SignUp() {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const name = String(f.get("name")).trim();
+    const email = String(f.get("email"));
     const password = String(f.get("password"));
     const confirm = String(f.get("confirm"));
 
@@ -25,7 +26,19 @@ export default function SignUp() {
     if (password !== confirm) return fail("দুটি পাসওয়ার্ড মিলছে না");
 
     setBusy(true); setErr("");
-    const { error } = await signUp.email({ name, email: String(f.get("email")), password });
+
+
+    const check = await fetch("/api/check-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    }).then((r) => r.json()).catch(() => ({ exists: false }));
+    if (check.exists) {
+      setBusy(false);
+      return fail("এই ইমেইল দিয়ে আগে থেকেই অ্যাকাউন্ট আছে, সাইন ইন করুন");
+    }
+
+    const { error } = await signUp.email({ name, email, password });
     setBusy(false);
     if (error) return fail(error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে");
     toast.success("রেজিস্ট্রেশন সফল! এবার সাইন ইন করুন");
