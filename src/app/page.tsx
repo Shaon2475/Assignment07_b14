@@ -39,14 +39,19 @@ export default function Home() {
         <EmptyState title="ডাটা লোড করা যায়নি" message="একটু পরে আবার চেষ্টা করুন।" />
       ) : (
         <>
-          <Section title="আজ দাম বেড়েছে ▲" sub="যেসব পণ্যের দাম সবচেয়ে বেশি বেড়েছে">
+          <Section title="আজ দাম বেড়েছে" icon="▲" iconClass="text-error">
             {loading ? <SkeletonGrid n={6} /> : <ProductGrid items={risers} />}
           </Section>
-          <Section title="আজ দাম কমেছে ▼" sub="যেসব পণ্যের দাম সবচেয়ে বেশি কমেছে">
+          <Section title="আজ দাম কমেছে" icon="▼" iconClass="text-success">
             {loading ? <SkeletonGrid n={6} /> : <ProductGrid items={fallers} />}
           </Section>
-          <Section id="সব-পণ্য" title="সব পণ্য" sub="নিত্যপ্রয়োজনীয় সব পণ্যের আজকের দাম">
-            {loading ? <SkeletonGrid /> : <ProductGrid items={data ?? []} />}
+          <Section id="সব-পণ্য" title="সব পণ্য">
+            <div className="space-y-4">
+              <p className="text-sm">
+                {loading ? "লোড হচ্ছে…" : `মোট ${toBn(data?.length ?? 0)}টি পণ্য দেখানো হচ্ছে`}
+              </p>
+              {loading ? <SkeletonGrid n={9} /> : <ProductGrid items={data ?? []} />}
+            </div>
           </Section>
         </>
       )}
