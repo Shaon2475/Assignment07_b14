@@ -28,7 +28,9 @@ export default function ProductPage() {
   const unitShort = p.unit.replace("প্রতি ", "");
   const up = p.change > 0, down = p.change < 0;
  
-  const diff = Math.round(Math.abs(p.price - p.price / (1 + p.change / 100)));
+  const diff = Number((p.yesterday
+    ? Math.abs(p.price - p.yesterday)
+    : Math.abs(p.price - p.price / (1 + p.change / 100))).toFixed(2));
   const trendText = !up && !down
     ? "গতকালের তুলনায় আজ দাম অপরিবর্তিত"
     : `গতকালের তুলনায় আজ দাম ${up ? "বেড়েছে" : "কমেছে"} · ${toBn(diff)} টাকা`;
