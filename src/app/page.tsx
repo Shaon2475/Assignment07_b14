@@ -2,16 +2,21 @@
 import Image from "next/image";
 import { useMemo } from "react";
 import { getProducts } from "@/lib/api";
+import { toBn } from "@/lib/bn";
 import { useAsync } from "@/lib/hooks";
 import ProductGrid, { SkeletonGrid } from "@/components/ProductGrid";
 import EmptyState from "@/components/EmptyState";
 
-function Section({ title, sub, id, children }: { title: string; sub?: string; id?: string; children: React.ReactNode }) {
+function Section({ title, icon, iconClass, id, children }: {
+  title: string; icon?: string; iconClass?: string; id?: string; children: React.ReactNode;
+}) {
   return (
-    <section id={id} className="mb-10 scroll-mt-28">
-      <h2 className="text-2xl font-extrabold">{title}</h2>
-      {sub && <p className="text-neutral/60 mb-4">{sub}</p>}
-      <div className={sub ? "" : "mt-4"}>{children}</div>
+    <section id={id} className="scroll-mt-40">
+      <h2 className="flex items-center gap-2 text-xl font-bold mb-3">
+        {icon && <span className={`text-base ${iconClass ?? ""}`}>{icon}</span>}
+        {title}
+      </h2>
+      {children}
     </section>
   );
 }
