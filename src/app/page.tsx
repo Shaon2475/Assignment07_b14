@@ -26,9 +26,8 @@ export default function Home() {
       {/* Hero */}
       <section className="grid md:grid-cols-2 gap-8 items-center py-10 md:py-14">
         <div>
-          <p className="text-primary font-semibold mb-2">🌿 আজকের বাজারদর</p>
-          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-3">প্রয়োজনীয় পণ্যের দাম এক নজরে</h1>
-          <p className="text-neutral/70 mb-6">চাল, ডাল, তেল, সবজি, মাছ ও মাংসের আজকের দাম এবং দাম বাড়া-কমার খবর — সব এক জায়গায়।</p>
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-3">আজকের বাজারের দাম এক নজরে</h1>
+          <p className="text-neutral/70 mb-6">চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।</p>
           <a href="#সব-পণ্য" className="btn btn-primary">সব পণ্য দেখুন ↓</a>
         </div>
         <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-base-300">
