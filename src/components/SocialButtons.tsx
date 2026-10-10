@@ -5,6 +5,7 @@ import { signIn } from "@/lib/auth-client";
 
 export default function SocialButtons() {
   const go = async (provider: "google" | "github") => {
+    await fetch("/api/cleanup", { method: "POST" }).catch(() => {});
     const { error } = await signIn.social({ provider, callbackURL: "/" });
     if (error) toast.error(error.message || "সোশ্যাল লগইন ব্যর্থ হয়েছে");
   };
