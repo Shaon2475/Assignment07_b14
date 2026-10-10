@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { fmtPrice, num } from "./bn";
 import type { Category, Market, Product } from "./types";
 
@@ -71,6 +71,7 @@ function toProduct(r: any, i = 0): Product {
     min: mins.length ? Math.min(...mins) : price,
     max: maxs.length ? Math.max(...maxs) : price,
     avg: price,
+    yesterday: r?.yesterday != null ? num(r.yesterday) : 0,
   };
 }
 
